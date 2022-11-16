@@ -53,15 +53,55 @@ def scrambled_initial_state_purification(L, Q, BC='PBC'):
     return state
 
 
+def scrambled_initial_state_sharpening(L, Q, BC='PBC'):
+    assert Q<L//2
+    T_scram = 4*L
+    filename = 'data/scrambled_states_purification/'+'L='+str(L)+'_T='+str(T_scram)+'_Q='+str(Q)
+    if os.path.isfile(filename):
+        with open(filename,'rb') as f:
+            state = pickle.load(f)
+        return state
+    q = qiskit.QuantumRegister(L+1, 'q')
+    c = qiskit.ClassicalRegister(1,'c')
+    circ = QuantumCircuit(q,c)
+    for i in range(1,Q+1,1):
+        circ.x(q[2*i+1])
+    circ.h(0)
+    circ.cnot(0,1)
+    # circ.cnot(0,2) # delete this line to study sharpening
+    
+    for _ in range(T_scram):
+        for i in range(1,L,2):
+            U = extensions.UnitaryGate(random_U_1_gate(),label=r'$U$')
+            circ.append(U,[q[i],q[i+1]])
+        for i in range(2,L,2):
+            U = extensions.UnitaryGate(random_U_1_gate(),label=r'$U$')
+            circ.append(U,[q[i],q[i+1]])
+        U = extensions.UnitaryGate(random_U_1_gate(),label=r'$U$')
+        if BC=='PBC' and L%2==0:
+            circ.append(U,[q[1],q[-1]])
+            
+            
+    backend = Aer.get_backend('statevector_simulator')
+    job = qiskit.execute(circ,backend=backend)
+    state = np.asarray(job.result().data()['statevector'])
+    with open(filename,'wb') as f:
+        pickle.dump(state,f)
+    return state
+
+
 ## main method for making and running the purification circuit
-def get_circuit(L,T,Q,p,rng,BC='PBC'):
+def get_circuit(L,T,Q,p,rng,BC='PBC',sharpening=False):
     assert Q<L//2
     q = qiskit.QuantumRegister(L+1, 'q') # qubit #0 is ancilla
     c = qiskit.ClassicalRegister(1,'c')
     circ = QuantumCircuit(q,c)
 
-    for i in range(1,Q+1,1):
-        circ.x([q[2*i + 1]])
+    if sharpening:
+        scrambled_state = scrambled_initial_state_sharpening(L=L,Q=Q,BC=BC)
+    else:
+        scrambled_state = scrambled_initial_state_purification(L=L,Q=Q,BC=BC)
+    circ.initialize(scrambled_state)
 
     p_locations = []
     total_N_m = 0
@@ -106,7 +146,7 @@ def run_circuit(L,T,p,seed,BC='PBC'):
     circ = qiskit.transpile(circ,backend=backend)
     job = qiskit.execute(circ,backend=backend)
     results = job.result()
-    
+
     if total_N_m == 0:
         measurement_array = np.zeros((L,T))
     else:
