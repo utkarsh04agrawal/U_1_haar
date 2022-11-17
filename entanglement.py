@@ -29,6 +29,7 @@ def index_to_confi(index, L, system=None):
 def reduced_density_matrix(vector, sub_system):
     #sub_system is a list of indices belonging to sub-system A
     L = int(np.log2(len(vector)))
+    # print(L)
     if len(vector.shape) > 1:
         L = len(vector.shape)
         vector = vector.reshape(2**L)

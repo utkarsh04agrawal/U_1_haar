@@ -160,7 +160,7 @@ def run_circuit(L,T,p,seed,BC='PBC'):
     return job, measurement_array, p_locations
 
 
-a,b,c = run_circuit(10,10,0.1,1)
+# a,b,c = run_circuit(10,10,0.1,1)
 
 
 def get_entropy(job,L):
