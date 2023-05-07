@@ -29,9 +29,12 @@ We find interesting data. For MG circuits proj measurement leads to linear (subl
 2 May
     [x] Change MG sampler.
         [] Re-run MG dynamics with proj measurement
-        [] Re-run MG dynamics with weak measurement
+        [x] Re-run MG dynamics with weak measurement
         [] Re-run MG dynamics with Haar encoder for proj measurement
         [] Re-run MG dynamics with Haar encoder for weak measurement
     [] Run MG dynamics with varying strength of Haarness
     [] Code to collect half-system entanglement
     [] Run more symmetric weak measurement scheme.
+
+7 May
+    [] make gitignore file in data directories
