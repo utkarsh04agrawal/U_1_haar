@@ -1,0 +1,1 @@
+This folder contains code and data when the MG is not sampled generically. This sampling had particle-hole symmetry, i.e particle hopping with no magnetic field. This was sampled using unitary_sampler/matchgate_sampler_particle_hole_symmetric.
