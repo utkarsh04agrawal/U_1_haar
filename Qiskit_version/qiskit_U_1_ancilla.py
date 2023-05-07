@@ -112,7 +112,7 @@ def get_circuit(L,T,Q,p,rng,BC='PBC',sharpening=False):
         scrambled_state = scrambled_initial_state_sharpening(L=L,Q=Q,BC=BC)
     else:
         scrambled_state = scrambled_initial_state_purification(L=L,Q=Q,BC=BC)
-    circ.initialize(scrambled_state)
+    # circ.initialize(scrambled_state)
     # backend = Aer.get_backend('statevector_simulator')
     # circ = qiskit.transpile(circ,backend=backend)
 
