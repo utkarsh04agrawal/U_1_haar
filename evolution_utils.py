@@ -132,6 +132,9 @@ def weak_measurement_layer(state,theta,L:int,rng_outcome: np.random.default_rng,
     return state
 
 
+
+
+
 def state_entropy(state,interval,renyi_index):
     # start = time.time()
         
