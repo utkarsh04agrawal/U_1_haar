@@ -28,8 +28,10 @@ def get_filename(t_scr,evolution_U_type,scram_U_type,root_direc):
     
 def read_entropy(L,T,t_scr,theta,BC,scrambling_type,evolution_type,root_direc):
     file_dir = get_filename(t_scr=t_scr,scram_U_type=scrambling_type,evolution_U_type=evolution_type,root_direc=root_direc)
-    file_dir = file_dir + '/L='+str(L)
-    file_dir = file_dir+'/T='+str(T)+'_tscr='+str(t_scr)+'_p='+str(theta)+'_BC='+BC+'/indiviudal_files/'
+    file_dir2 = file_dir + '/L='+str(L)
+    file_dir = file_dir2+'/T='+str(T)+'_tscr='+str(t_scr)+'_theta='+str(theta)+'_BC='+BC
+    if not os.path.isdir(file_dir):
+        file_dir = file_dir2 + '/T='+str(T)+'_tscr='+str(t_scr)+'_p='+str(theta)+'_BC='+BC
     entropy_list = []
     for filename in os.listdir(file_dir):
         with open(file_dir + '/' + filename,'rb') as f:

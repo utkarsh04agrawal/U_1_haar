@@ -68,47 +68,37 @@ def matchgate_sampler(rng: np.random.default_rng):
     return U
 
 
-def get_U_1_unitary_circuit(seed_unitary, number_of_gates,which_U='haar',PH=False):
+def get_U_1_unitary_circuit(seed_unitary, number_of_gates,which_U='haar'):
     assert which_U in ['haar','matchgate'], print('which_U can only be either \'haar\' or \'matchgate\'')
-    U_label = ''
     if which_U == 'haar':
         U_label = '_haar'
-    elif which_U == 'matchgate':
+    if which_U == 'matchgate':
         U_label = '_matchgate'
 
-    if PH:
-        U_label = U_label + '_PH'
-
     filename = 'unitary_gates_data/U(1)'+U_label
-    filename = os.path.join(os.path.dirname(__file__),filename)
     if not os.path.isdir(filename):
         os.makedirs(filename)
     filename = filename + '/N=' + str(4) + '_seed=' + str(seed_unitary)
+    # if os.path.isfile(filename):
+    #     with open(filename, 'rb') as f:
+    #         unitary_gates, unitary_rng = pickle.load(f)
 
-    if os.path.isfile(filename):
-        with open(filename, 'rb') as f:
-            unitary_gates, unitary_rng = pickle.load(f)
-    else:
-        unitary_gates = []
-        unitary_rng = np.random.default_rng(seed=seed_unitary)
+    # else:
+    unitary_gates = []
+    unitary_rng = np.random.default_rng(seed=seed_unitary)
 
-    if len(unitary_gates) == number_of_gates:
-        return unitary_gates
+    # if len(unitary_gates) == number_of_gates:
+    #     return unitary_gates
 
     number_of_gates_available = len(unitary_gates)
     while number_of_gates_available < number_of_gates:
-        if which_U == 'matchgate':
-            if PH is False:
-                unitary_gates.append(matchgate_sampler(unitary_rng))
-            else:
-                unitary_gates.append(matchgate_sampler_particle_hole_symmetric(unitary_rng))
-        elif which_U == 'haar':
+        if which_U == 'haar':
             unitary_gates.append(U_1_sym_gate_sampler(unitary_rng))
+        if which_U == 'matchgate':
+            unitary_gates.append(matchgate_sampler(unitary_rng))
         number_of_gates_available += 1
-
-    with open(filename, 'wb') as f:
-        pickle.dump([unitary_gates, unitary_rng], f)
-        
+    # with open(filename, 'wb') as f:
+        # pickle.dump([unitary_gates, unitary_rng], f)
     return unitary_gates
 
 
