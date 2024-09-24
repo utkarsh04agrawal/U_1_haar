@@ -1,5 +1,4 @@
-/data_par*
+#/data_par*
 /Qiskit_version/*data
 *.pyc
 unitary_gates_data
-!data_weak_measurements/matchgate_scrambling/matchgate_evolution/figures/S_vs_t_A=0BC=PBC/decay_rate_theta=0.1.pdf

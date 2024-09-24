@@ -1,0 +1,4 @@
+#!bin/bash
+source = "uagrawal@knot7.cnsi.ucsb.edu:U_1_haar/PH/data_weak_measurement/purification/matchgate_scrambling/matchgate_evolution/L*/T*/merged_files/*"
+target = "./PH/test/"
+rsync -ap -v -h $source $target
